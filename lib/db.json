@@ -1,0 +1,52 @@
+{
+  "document": [
+    {
+      "id": 1,
+      "name": "File1",
+      "type": "Quiz",
+      "semester": "Fall 2022"
+    },
+    {
+      "id": 2,
+      "name": "File2",
+      "type": "Assignment",
+      "semester": "Fall 2022"
+    },
+    {
+      "id": 3,
+      "name": "File3",
+      "type": "Quiz",
+      "semester": "Fall 2022"
+    },
+    {
+      "id": 4,
+      "name": "File4",
+      "type": "Quiz",
+      "semester": "Fall 2022"
+    },
+    {
+      "id": 5,
+      "name": "File5",
+      "type": "Quiz",
+      "semester": "Fall 2022"
+    },
+    {
+      "id": 6,
+      "name": "File6",
+      "type": "Quiz",
+      "semester": "Fall 2022"
+    },
+    {
+      "id": 7,
+      "name": "File7",
+      "type": "Quiz",
+      "semester": "Fall 2022"
+    },
+    {
+      "id": 8,
+      "name": "File8",
+      "type": "Quiz",
+      "semester": "Fall 2022"
+    }
+  ]
+}

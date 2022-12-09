@@ -1,21 +1,11 @@
 import mysql from "mysql2/promise";
+import { getAllUsers } from "../../Database/UserCommands";
 
 export default async function handler(req, res) {
-  try {
-    const connection = await mysql.createConnection({
-      host: "localhost",
-      port: 3306,
-      user: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: "fms",
-    });
-    if (connection) {
-      res.status(200).json({ message: "Database Connected" });
-      return;
-    }
-  } catch (err) {
-    console.log(err);
+  const response = await getAllUsers();
+  if (response) {
+    res.status(200).json({ message: "DB Connected", response });
+  } else {
     res.status(500).json({ message: "Error Connecting Database" });
-    return;
   }
 }

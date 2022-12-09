@@ -37,6 +37,7 @@ export default function AppBarComp() {
             variant="outlined"
             color="secondary"
             className={styles.button}
+            href="/upload"
           >
             Upload
           </Button>
