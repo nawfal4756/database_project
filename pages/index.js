@@ -4,18 +4,7 @@ import { useEffect, useState } from "react";
 import DocumentCard from "../Components/DocumentCard";
 import { defaults } from "../lib/default";
 
-export default function Main() {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    async function getData() {
-      const data = await axios(`${defaults.link}/document`);
-      setData(data.data);
-    }
-
-    getData();
-  }, []);
-
+export default function Main({ data }) {
   return (
     <div>
       <Grid container spacing={2}>
@@ -35,3 +24,13 @@ export default function Main() {
     </div>
   );
 }
+
+export const getServerSideProps = async (context) => {
+  const data = await axios(`${defaults.link}/document`);
+
+  return {
+    props: {
+      data: data.data,
+    },
+  };
+};

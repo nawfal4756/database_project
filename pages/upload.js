@@ -2,8 +2,9 @@ import { Typography, Button } from "@mui/material";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import FileUpload from "../Components/FileUpload";
+import { getAllCourses } from "../Database/CourseCommands";
 
-export default function Upload() {
+export default function Upload({ courses }) {
   const { data: session } = useSession({ required: true });
   const [files, setFiles] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
@@ -28,7 +29,16 @@ export default function Upload() {
           onChange={HandleFileChange}
         />
       </Button>
-      <FileUpload open={openDialog} files={files} />
+      <FileUpload open={openDialog} files={files} courses={courses} />
     </div>
   );
 }
+
+export const getServerSideProps = async (context) => {
+  const courses = await getAllCourses();
+  return {
+    props: {
+      courses,
+    },
+  };
+};

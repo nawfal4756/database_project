@@ -7,20 +7,16 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 
-export default function DocumentCard({ data }) {
-  const { id, name, type, semester } = data;
+export default function CourseCard({ data }) {
+  const { course_code, course_name } = data;
   return (
     <div>
       <Card>
         <CardContent>
-          <Typography variant="h3">{name}</Typography>
-          <Typography variant="h5">{type}</Typography>
-          <Typography variant="P" sx={{ textAlign: "right", color: "gray" }}>
-            {semester}
-          </Typography>
+          <Typography variant="h3">{course_name}</Typography>
         </CardContent>
         <CardActions>
-          <Link href={`/document/${id}`}>
+          <Link href={`/course/${course_code}`}>
             <Button size="small" sx={{ color: "black" }} variant="outlined">
               View Course
             </Button>

@@ -32,7 +32,20 @@ CREATE TABLE account (
     foreign key (userId) references user(id)
 );
 
-DROP TABLE account;
+CREATE TABLE course (
+	course_code VARCHAR(10) primary key,
+    course_name VARCHAR(100) not null,
+    course_description VARCHAR(500) not null,
+    course_level VARCHAR(500) not null
+);
+
+INSERT INTO course VALUES ('CS2005', 'Database Systems', 'Database Systems', 'Bachelors');
+INSERT INTO course VALUES ('SE3001', 'Software Construction and Development', 'Software Construction and Development', 'Bachelors');
+INSERT INTO course VALUES ('CS2009', 'Design and Analysis of Algorithms', 'Design and Analysis of Algorithms', 'Bachelors');
+
+SELECT * FROM course;
+
+DROP TABLE course;
 
 INSERT INTO user (name, email, emailVerified, image) VALUES ('Nawfal', 'nawfalmehboob@gmail.com', '2022-12-05 09:21:39', 'image');
 

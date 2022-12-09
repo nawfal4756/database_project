@@ -2,18 +2,18 @@ import { Autocomplete, TextField } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-export default function SelectCourse({ index, HandleCourseChange }) {
+export default function SelectCourse({ index, HandleCourseChange, courses }) {
   const [selectedData, setSelectedData] = useState("");
-  const [courses, setCourses] = useState([]);
+  // const [courses, setCourses] = useState([]);
 
-  useEffect(() => {
-    async function getCourses() {
-      const response = await axios.get("/api/course");
-      setCourses(response.data.courses);
-    }
+  // useEffect(() => {
+  //   async function getCourses() {
+  //     const response = await axios.get("/api/course");
+  //     setCourses(response.data.courses);
+  //   }
 
-    getCourses();
-  }, []);
+  //   getCourses();
+  // }, []);
 
   const HandleChange = (event, newValue) => {
     setSelectedData(newValue);

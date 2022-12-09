@@ -31,16 +31,19 @@ export default function AppBarComp() {
     <div>
       <AppBar>
         <Toolbar>
-          <Typography>Fast E-Resoucrces</Typography>
-
-          <Button
-            variant="outlined"
-            color="secondary"
-            className={styles.button}
-            href="/upload"
-          >
-            Upload
-          </Button>
+          <Link href="/">
+            <Typography sx={{ color: "white" }}>Fast E-Resoucrces</Typography>
+          </Link>
+          <Link href="/course">
+            <Button sx={{ color: "white", display: "block", ml: 2 }}>
+              Courses
+            </Button>
+          </Link>
+          <Link href="/upload">
+            <Button sx={{ color: "white", display: "block", mr: 1 }}>
+              Upload
+            </Button>
+          </Link>
 
           <Box>
             <IconButton size="large" onClick={HandleMenuOpen}>

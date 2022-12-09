@@ -21,7 +21,7 @@ import SelectCourse from "./SelectCourse";
 import SelectFile from "./SelectFile";
 import SelectSemester from "./SelectSemester";
 
-export default function FileUpload({ open, files }) {
+export default function FileUpload({ open, files, courses }) {
   const filesArray = [];
   const { data: session } = useSession();
   const [anonymous, setAnonymous] = useState(false);
@@ -105,6 +105,7 @@ export default function FileUpload({ open, files }) {
                         <SelectCourse
                           index={index}
                           HandleCourseChange={HandleCourseChange}
+                          courses={courses}
                         />
                       </TableCell>
                       <TableCell>
@@ -127,7 +128,7 @@ export default function FileUpload({ open, files }) {
             }
             label="Anonymous"
           />
-          {session.type === "teacher" ? (
+          {session?.type === "teacher" ? (
             <>
               <FormControlLabel
                 control={
