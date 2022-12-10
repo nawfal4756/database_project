@@ -22,7 +22,7 @@ export default function DocumentCard({ data }) {
         <CardActions>
           <Link href={`/document/${id}`}>
             <Button size="small" sx={{ color: "black" }} variant="outlined">
-              View Course
+              View Document
             </Button>
           </Link>
         </CardActions>
