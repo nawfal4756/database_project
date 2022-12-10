@@ -54,13 +54,21 @@ export const getServerSideProps = async (context) => {
     context.res,
     authOptions
   );
-  // console.log(session);
+
   if (session) {
-    return {
-      redirect: {
-        destination: "/",
-      },
-    };
+    if (!session?.verified) {
+      return {
+        redirect: {
+          destination: "/signup",
+        },
+      };
+    } else {
+      return {
+        redirect: {
+          destination: "/",
+        },
+      };
+    }
   }
 
   return {

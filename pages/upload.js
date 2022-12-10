@@ -1,8 +1,10 @@
 import { Typography, Button } from "@mui/material";
+import { unstable_getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import FileUpload from "../Components/FileUpload";
 import { getAllCourses } from "../Database/CourseCommands";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 export default function Upload({ courses }) {
   const { data: session } = useSession({ required: true });
@@ -36,6 +38,30 @@ export default function Upload({ courses }) {
 
 export const getServerSideProps = async (context) => {
   const courses = await getAllCourses();
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+
+  if (session) {
+    if (!session?.verified) {
+      return {
+        redirect: {
+          destination: "/signup",
+        },
+      };
+    }
+  }
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/login",
+      },
+    };
+  }
+
   return {
     props: {
       courses,

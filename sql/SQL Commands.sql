@@ -70,3 +70,48 @@ SELECT * FROM session WHERE sessionToken = ?;
 UPDATE session SET expires = ?, sessionToken = ?, userId = ? WHERE sessionToken = ?;
 
 DELETE FROM session WHERE sessionToken = ?;
+
+-- Personal
+CREATE TABLE student (
+	student_email VARCHAR(100) primary key,
+    student_fname VARCHAR(50),
+	student_lname VARCHAR(50),
+    student_DOB Date,
+    student_degree_level VARCHAR(50),
+    basicForm boolean default false
+);
+
+DROP TABLE admin;
+
+CREATE TABLE teacher (
+	teacher_email VARCHAR(100) primary key,
+    teacher_fname VARCHAR(50),
+	teacher_lname VARCHAR(50),
+    teacher_DOB Date,
+    basicForm boolean default false
+);
+
+CREATE TABLE campus (
+	campus_id int primary key auto_increment,
+    campus_name VARCHAR(50) not null,
+    campus_city_name VARCHAR(50) not null
+);
+
+CREATE TABLE admin (
+	admin_email VARCHAR(100) primary key,
+    admin_fname VARCHAR(50),
+	admin_lname VARCHAR(50),
+    basicForm boolean default false
+);
+
+INSERT INTO student (student_email) VALUES (?);
+INSERT INTO teacher (teacher_email) VALUES (?);
+INSERT INTO admin (admin_email) VALUES (?);
+
+UPDATE student SET student_fname = ?, student_lname = ?, student_degree_level = ?, basicForm = true WHERE student_email = ?;
+UPDATE teacher SET teacher_fname = ?, teacher_lname = ?, basicForm = true WHERE teacher_email = ?;
+UPDATE admin SET admin_fname = ?, admin_lname = ?, basicForm = true WHERE admin_email = ?;
+
+SELECT * FROM admin WHERE admin_email = ?;
+SELECT * FROM student WHERE student_email = ?;
+SELECT * FROM teacher WHERE teacher_email = ?;

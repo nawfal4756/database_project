@@ -8,7 +8,6 @@ const UPDATE_SESSION = "UPDATE session SET sessionToken = ? WHERE id = ?;";
 const DELETE_SESSION = "DELETE FROM session WHERE id = ?;";
 
 export const insertSession = async (sessionToken, userId, expires) => {
-  const connection = await dbConnection();
   const [rows, fields] = await connection.execute(INSERT_SESSION, [
     expires,
     sessionToken,
