@@ -60,11 +60,13 @@ export default function AppBarComp() {
                 <MenuItem onClick={signIn}>Login</MenuItem>
               ) : (
                 <div>
-                  <Typography className={styles.title}>
-                    {session?.user.name}
-                  </Typography>
+                  <Typography sx={{ p: 2 }}>{session?.user.name}</Typography>
                   <Divider />
-                  <MenuItem href="/account">My Account</MenuItem>
+                  <Link href="/account">
+                    <MenuItem sx={{ color: "black", textDecoration: "none" }}>
+                      My Account
+                    </MenuItem>
+                  </Link>
                   <MenuItem onClick={signOut}>Sign Out</MenuItem>
                 </div>
               )}

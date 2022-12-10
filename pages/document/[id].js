@@ -1,4 +1,6 @@
 import { Typography, Unstable_Grid2 as Grid } from "@mui/material";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 export default function DisplayDocument() {
   return (
@@ -19,3 +21,25 @@ export default function DisplayDocument() {
     </div>
   );
 }
+
+export const getServerSideProps = async (context) => {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+
+  if (session) {
+    if (!session?.verified) {
+      return {
+        redirect: {
+          destination: "/signup",
+        },
+      };
+    }
+  }
+
+  return {
+    props: {},
+  };
+};

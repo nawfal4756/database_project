@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { defaults } from "../../lib/default";
 import DocumentCard from "../../Components/DocumentCard";
+import { unstable_getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 export default function CourseDocument({
   verifiedDocuments,
@@ -44,6 +46,22 @@ export default function CourseDocument({
 
 export const getServerSideProps = async (context) => {
   const { code } = context.query;
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+
+  if (session) {
+    if (!session?.verified) {
+      return {
+        redirect: {
+          destination: "/signup",
+        },
+      };
+    }
+  }
+
   const responseVerified = await axios(
     `${defaults.link}/document?course_code=${code}&verified=true`
   );

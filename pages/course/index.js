@@ -1,6 +1,8 @@
 import { Typography, Unstable_Grid2 as Grid } from "@mui/material";
+import { unstable_getServerSession } from "next-auth";
 import CourseCard from "../../Components/CourseCard";
 import { getAllCourses } from "../../Database/CourseCommands";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 export default function CourseHomePage({ courses }) {
   return (
@@ -23,7 +25,22 @@ export default function CourseHomePage({ courses }) {
 
 export const getServerSideProps = async (context) => {
   const courses = await getAllCourses();
-  console.log(courses);
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  );
+
+  if (session) {
+    if (!session?.verified) {
+      return {
+        redirect: {
+          destination: "/signup",
+        },
+      };
+    }
+  }
+
   return {
     props: {
       courses,

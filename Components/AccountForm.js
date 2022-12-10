@@ -15,26 +15,26 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
 
-export default function Signup() {
-  const { data: session } = useSession();
+export default function AccountForm({ session }) {
   const router = useRouter();
   const [firstName, setFirstName] = useState(session?.user.name);
   const [lastName, setLastName] = useState("");
   // const [dob, setDob] = useState(new Date());
   const [degree, setDegree] = useState("");
   const useEffectRef = useRef(false);
-
+  console.log("Session", session);
   useEffect(() => {
     async function inputUser() {
-      if (session.type === "admin") {
+      if (session?.type === "admin") {
         return;
       }
       const response = await axios.post("/api/signup", {
         email: session?.user.email,
         type: "insert",
       });
+      console.log("Insert Response", response);
     }
-    if (!useEffectRef.current) {
+    if (!useEffectRef.current && !session?.verified) {
       inputUser();
       useEffectRef.current = true;
     }
@@ -64,6 +64,7 @@ export default function Signup() {
       degree: session.type === "student" ? degree : null,
       type: "update",
     });
+    console.log("Update Response", response);
     router.push("/");
   };
 
@@ -153,7 +154,7 @@ export default function Signup() {
             </LocalizationProvider>
           </Grid> */}
 
-          {session.type === "student" ? (
+          {session?.type === "student" ? (
             <Grid
               item
               xs={12}
