@@ -16,6 +16,7 @@
     "@mui/x-date-pickers": "^5.0.10",
     "aws-sdk": "^2.1272.0",
     "axios": "^1.2.1",
+    "camelcase": "^7.0.0",
     "dayjs": "^1.11.7",
     "eslint": "8.27.0",
     "eslint-config-next": "13.0.2",

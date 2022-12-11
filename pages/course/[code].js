@@ -1,9 +1,8 @@
 import { Typography, Unstable_Grid2 as Grid } from "@mui/material";
-import axios from "axios";
-import { defaults } from "../../lib/default";
 import DocumentCard from "../../Components/DocumentCard";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
+import { selectVerifiedUnverifiedDocuments } from "../../Database/DocumentCommands";
 
 export default function CourseDocument({
   verifiedDocuments,
@@ -60,14 +59,8 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const responseVerified = await axios(
-    `${defaults.link}/document?course_code=${code}&verified=true`
-  );
-  const responseUnverified = await axios(
-    `${defaults.link}/document?course_code=${code}&verified=false`
-  );
-  let verifiedDocuments = responseVerified.data;
-  let unverifiedDocuments = responseUnverified.data;
+  const verifiedDocuments = await selectVerifiedUnverifiedDocuments(true);
+  const unverifiedDocuments = await selectVerifiedUnverifiedDocuments(false);
 
   return {
     props: {

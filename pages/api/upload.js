@@ -15,6 +15,11 @@ export default async function handler(req, res) {
   const form = formidable({ multiples: true });
   const session = await unstable_getServerSession(req, res, authOptions);
 
+  if (!session) {
+    res.json(400).json("Not Logged In!");
+    return;
+  }
+
   form.parse(req, (err, fields, files) => {
     const filesArray = [];
     const { anonymous, showStudent, showTeacher } = fields;

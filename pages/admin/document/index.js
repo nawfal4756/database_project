@@ -10,19 +10,41 @@ import {
 import axios from "axios";
 import { unstable_getServerSession } from "next-auth";
 import Link from "next/link";
-import { defaults } from "../../../lib/default";
+import { useEffect, useState } from "react";
 import { authOptions } from "../../api/auth/[...nextauth]";
+import camelcase from "camelcase";
 
-export default function AdminDocumentPage({ documents }) {
+export default function AdminDocumentPage() {
+  const [documents, setDocuments] = useState([]);
+  const [date, setDate] = useState(new Date());
+  useEffect(() => {
+    async function getDocuments() {
+      const response = await axios("/api/admin/document");
+      setDocuments(response.data.documents);
+    }
+
+    getDocuments();
+  }, [date]);
+
+  const HandleVerify = async (id) => {
+    const response = await axios.post(`/api/admin/document`, id);
+    console.log(response);
+    setDate(new Date());
+  };
+
+  const HandleDelete = async (id) => {
+    const response = await axios.delete(`/api/admin/document?code=${id}`);
+    console.log(response);
+    setDate(new Date());
+    console.log(id);
+  };
+
   return (
     <div>
       <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ textAlign: "center", fontWeight: "bold" }}>
-                Document Name
-              </TableCell>
               <TableCell sx={{ textAlign: "center", fontWeight: "bold" }}>
                 Type
               </TableCell>
@@ -48,44 +70,58 @@ export default function AdminDocumentPage({ documents }) {
               return (
                 <TableRow key={index}>
                   <TableCell sx={{ textAlign: "center" }}>
-                    {item.name}
+                    {camelcase(item.document_type, { pascalCase: true })}
                   </TableCell>
                   <TableCell sx={{ textAlign: "center" }}>
-                    {item.type}
+                    {item.course_name}
                   </TableCell>
                   <TableCell sx={{ textAlign: "center" }}>
-                    {item.course_code}
+                    {item.campus}
                   </TableCell>
                   <TableCell sx={{ textAlign: "center" }}>
-                    {item.campus_id}
-                  </TableCell>
-                  <TableCell sx={{ textAlign: "center" }}>
-                    {item.semester}
+                    {camelcase(item.document_date_semester, {
+                      pascalCase: true,
+                    }) +
+                      " - " +
+                      item.document_date_year}
                   </TableCell>
                   <TableCell
                     sx={{
                       textAlign: "center",
-                      color: item.verified ? "green" : "red",
+                      color: item.document_verified ? "green" : "red",
                     }}
                   >
-                    {item.verified ? "Verified" : "Not Verified"}
+                    {item.document_verified ? "Verified" : "Not Verified"}
                   </TableCell>
                   <TableCell sx={{ textAlign: "center" }}>
-                    <Link href={`/admin/document/${item.document_id}`}>
+                    <Link
+                      href={`/document/${item.course_code}-${item.document_id}`}
+                    >
                       <Button variant="contained" sx={{ mx: 1 }}>
                         View
                       </Button>
                     </Link>
-                    {item.verified ? (
-                      <Link href={`/api/admin/verify/${item.document_id}`}>
-                        <Button variant="contained">Verify</Button>
-                      </Link>
-                    ) : null}
-                    <Link href={`/api/admin/delete/${item.document_id}`}>
-                      <Button variant="contained" sx={{ mx: 1 }}>
-                        Delete
+                    {!item.document_verified ? (
+                      <Button
+                        variant="contained"
+                        onClick={() =>
+                          HandleVerify(
+                            `${item.course_code}-${item.document_id}`
+                          )
+                        }
+                      >
+                        Verify
                       </Button>
-                    </Link>
+                    ) : null}
+                    <Button
+                      variant="contained"
+                      sx={{ mx: 1 }}
+                      onClick={() =>
+                        HandleDelete(`${item.course_code}-${item.document_id}`)
+                      }
+                    >
+                      Delete
+                    </Button>
                   </TableCell>
                 </TableRow>
               );
@@ -103,8 +139,6 @@ export const getServerSideProps = async (context) => {
     context.res,
     authOptions
   );
-  const response = await axios(`${defaults.link}/document`);
-  const documents = response.data;
 
   if (!session) {
     return {
@@ -131,8 +165,6 @@ export const getServerSideProps = async (context) => {
   }
 
   return {
-    props: {
-      documents,
-    },
+    props: {},
   };
 };

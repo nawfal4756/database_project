@@ -126,6 +126,7 @@ SELECT campus_id, concat_ws(' - ', campus_name, campus_city_name) as campus_name
 
 CREATE TABLE document (
 	course_code VARCHAR(10),
+    document_id int unsigned auto_increment,
     document_uploaded_date timestamp default now(),
 	document_name VARCHAR(200) not null,
     document_type VARCHAR(20) not null,
@@ -138,11 +139,22 @@ CREATE TABLE document (
     document_uploader_type VARCHAR(10) not null,
     document_date_semester VARCHAR(20) not null,
     document_date_year int not null,
-    primary key(course_code, document_uploaded_date),
+    primary key(course_code, document_id),
     foreign key(course_code) references course(course_code),
     foreign key(campus_id) references campus(campus_id)
-);
+)Engine=MyISAM;
 
 DROP TABLE document;
+SELECT * FROM document;
+SELECT d.document_id, d.document_type, d.document_date_semester, d.document_date_year, c.course_code, c.course_name FROM document d JOIN course c ON d.course_code = c.course_code ORDER BY document_uploaded_date DESC LIMIT 20;
+SELECT * FROM document WHERE course_code = ? AND document_id = ?;
+SELECT document_id, document_type, document_date_semester, document_date_year, course_code FROM document where document_verified = ?;
+SELECT COUNT(document_id) as count FROM document WHERE document_verified = true;
 
 INSERT INTO document (course_code, document_name, document_type, document_anonymous, document_student, document_teacher, campus_id, document_uploader_email, document_uploader_type, document_date_semester, document_date_year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+SELECT d.document_id, d.course_code, document_name, d.document_type, co.course_name, concat_ws(' - ', ca.campus_name, ca.campus_city_name) as 'campus', d.document_date_semester, d.document_date_year, d.document_verified FROM document d JOIN course co ON d.course_code = co.course_code JOIN campus ca ON d.campus_id = ca.campus_id WHERE d.course_id = ? AND d.document_id = ?;
+
+UPDATE document SET document_verified = true WHERE course_code = ? AND document_id = ?;
+
+DELETE FROM document WHERE course_code = ? AND document_id = ?;

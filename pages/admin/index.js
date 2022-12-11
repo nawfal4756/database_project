@@ -2,10 +2,24 @@ import { Button, Typography, Unstable_Grid2 as Grid } from "@mui/material";
 import axios from "axios";
 import { unstable_getServerSession } from "next-auth";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { defaults } from "../../lib/default";
 import { authOptions } from "../api/auth/[...nextauth]";
 
-export default function AdminHomePage({ countNotVerified, countAll }) {
+export default function AdminHomePage() {
+  const [countAll, setCountAll] = useState(0);
+  const [countVerified, setCountVerified] = useState(0);
+
+  useEffect(() => {
+    async function getValues() {
+      const response = await axios("/api/admin");
+      setCountAll(response.data.allCount[0].count);
+      setCountVerified(response.data.verifiedCount[0].count);
+    }
+
+    getValues();
+  }, []);
+
   return (
     <div>
       <Grid container spacing={2}>
@@ -22,10 +36,11 @@ export default function AdminHomePage({ countNotVerified, countAll }) {
         <Grid item xs={12}>
           <Typography>Total Number of documents: {countAll}</Typography>
           <Typography>
-            Total Number of documents verified: {countAll - countNotVerified}
+            Total Number of documents verified: {countVerified}
           </Typography>
           <Typography>
-            Total Number of documents needed to be verified: {countNotVerified}
+            Total Number of documents needed to be verified:{" "}
+            {countAll - countVerified}
           </Typography>
         </Grid>
       </Grid>
@@ -34,11 +49,6 @@ export default function AdminHomePage({ countNotVerified, countAll }) {
 }
 
 export const getServerSideProps = async (context) => {
-  const responseNotVerfied = await axios(
-    `${defaults.link}/document?&verified=false`
-  );
-  const responseAll = await axios(`${defaults.link}/document`);
-
   const session = await unstable_getServerSession(
     context.req,
     context.res,
@@ -69,13 +79,7 @@ export const getServerSideProps = async (context) => {
     }
   }
 
-  const countNotVerified = responseNotVerfied.data.length;
-  const countAll = responseAll.data.length;
-
   return {
-    props: {
-      countNotVerified,
-      countAll,
-    },
+    props: {},
   };
 };

@@ -2,10 +2,13 @@ import { Typography, Unstable_Grid2 as Grid } from "@mui/material";
 import axios from "axios";
 import { unstable_getServerSession } from "next-auth";
 import DocumentCard from "../Components/DocumentCard";
+import { selectDocuments20 } from "../Database/DocumentCommands";
 import { defaults } from "../lib/default";
 import { authOptions } from "./api/auth/[...nextauth]";
 
-export default function Main({ data }) {
+export default function Main({ documents }) {
+  const parsedDocuments = JSON.parse(documents);
+  console.log(parsedDocuments);
   return (
     <div>
       <Grid container spacing={2}>
@@ -14,7 +17,7 @@ export default function Main({ data }) {
             Recently Uploaded
           </Typography>
         </Grid>
-        {data.map((data, index) => {
+        {parsedDocuments?.map((data, index) => {
           return (
             <Grid xs={12} md={6} key={index}>
               <DocumentCard data={data} />
@@ -28,6 +31,8 @@ export default function Main({ data }) {
 
 export const getServerSideProps = async (context) => {
   const data = await axios(`${defaults.link}/document`);
+  const documents = await selectDocuments20();
+  console.log(documents);
   const session = await unstable_getServerSession(
     context.req,
     context.res,
@@ -46,7 +51,7 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
-      data: data.data,
+      documents: JSON.stringify(documents),
     },
   };
 };
