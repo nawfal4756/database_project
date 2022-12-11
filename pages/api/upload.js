@@ -1,18 +1,9 @@
 import formidable from "formidable";
 import { createReadStream } from "fs";
-import AWS from "aws-sdk";
 import { insertDocument } from "../../Database/DocumentCommands";
 import { unstable_getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
-
-const s3client = new AWS.S3({
-  endpoint: process.env.DO_SPACES_URL,
-  region: "fra1",
-  credentials: {
-    accessKeyId: process.env.DO_SPACES_ID,
-    secretAccessKey: process.env.DO_SPACES_SECRET,
-  },
-});
+import { s3client } from "../../lib/AWSConfig";
 
 export const config = {
   api: {
