@@ -1,67 +1,75 @@
 {
   "document": [
     {
-      "id": 1,
+      "document_id": 1,
       "name": "File1",
       "type": "Quiz",
       "semester": "Fall 2022",
       "course_code": "CS2005",
+      "campus_id": 1,
       "verified": false
     },
     {
-      "id": 2,
+      "document_id": 2,
       "name": "File2",
       "type": "Assignment",
       "semester": "Fall 2022",
       "course_code": "CS2005",
+      "campus_id": 2,
       "verified": true
     },
     {
-      "id": 3,
+      "document_id": 3,
       "name": "File3",
       "type": "Quiz",
       "semester": "Fall 2022",
       "course_code": "SE3001",
+      "campus_id": 3,
       "verified": false
     },
     {
-      "id": 4,
+      "document_id": 4,
       "name": "File4",
       "type": "Quiz",
       "semester": "Fall 2022",
       "course_code": "CS2005",
+      "campus_id": 4,
       "verified": true
     },
     {
-      "id": 5,
+      "document_id": 5,
       "name": "File5",
       "type": "Quiz",
       "semester": "Fall 2022",
       "course_code": "SE3001",
+      "campus_id": 1,
       "verified": true
     },
     {
-      "id": 6,
+      "document_id": 6,
       "name": "File6",
       "type": "Quiz",
       "semester": "Fall 2022",
       "course_code": "CS2009",
+      "campus_id": 2,
       "verified": false
     },
     {
-      "id": 7,
+      "document_id": 7,
       "name": "File7",
       "type": "Quiz",
       "semester": "Fall 2022",
       "course_code": "SE3001",
+      "campus_id": 3,
       "verified": true
     },
     {
-      "id": 8,
+      "document_id": 8,
       "name": "File8",
       "type": "Quiz",
       "semester": "Fall 2022",
       "course_code": "CS2009",
+      "campus_id": 4,
       "verified": true
     }
   ]

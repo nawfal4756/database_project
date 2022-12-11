@@ -1,7 +1,5 @@
 import { Typography, Unstable_Grid2 as Grid } from "@mui/material";
 import axios from "axios";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { defaults } from "../../lib/default";
 import DocumentCard from "../../Components/DocumentCard";
 import { unstable_getServerSession } from "next-auth";

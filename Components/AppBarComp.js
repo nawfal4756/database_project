@@ -13,7 +13,6 @@ import { Box } from "@mui/system";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
-import styles from "../styles/AppBarComp.module.css";
 
 export default function AppBarComp() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -44,6 +43,13 @@ export default function AppBarComp() {
               Upload
             </Button>
           </Link>
+          {session?.type === "admin" ? (
+            <Link href="/admin">
+              <Button sx={{ color: "white", display: "block", mr: 1 }}>
+                Admin
+              </Button>
+            </Link>
+          ) : null}
 
           <Box>
             <IconButton size="large" onClick={HandleMenuOpen}>
@@ -53,6 +59,7 @@ export default function AppBarComp() {
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={HandleMenuClose}
+              onClick={HandleMenuClose}
               anchorOrigin={{ vertical: "top", horizontal: "right" }}
               transformOrigin={{ vertical: "top", horizontal: "right" }}
             >

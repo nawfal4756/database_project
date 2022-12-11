@@ -17,23 +17,24 @@ import {
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import SelectCampus from "./SelectCampus";
 import SelectCourse from "./SelectCourse";
 import SelectFile from "./SelectFile";
 import SelectSemester from "./SelectSemester";
 
-export default function FileUpload({ open, files, courses }) {
+export default function FileUpload({ open, files, courses, campuses }) {
   const filesArray = [];
   const { data: session } = useSession();
   const [anonymous, setAnonymous] = useState(false);
   const [showStudent, setShowStudent] = useState(true);
   const [showTeacher, setShowTeacher] = useState(true);
-  console.log(session);
 
   Object.keys(files).forEach((value, index) => {
     filesArray.push({
       file: files[value],
       type: "",
       course: "",
+      campus: "",
       semester: "",
       year: "",
     });
@@ -59,6 +60,10 @@ export default function FileUpload({ open, files, courses }) {
     filesArray[index].course = value;
   };
 
+  const HandleCampusChange = (index, value) => {
+    filesArray[index].campus = value;
+  };
+
   const HandleSemesterYearChange = (index, value) => {
     filesArray[index].semester = value.semester;
     filesArray[index].year = value.year;
@@ -71,6 +76,11 @@ export default function FileUpload({ open, files, courses }) {
     form.append("anonymous", anonymous);
     form.append("showStudent", showStudent);
     form.append("showTeacher", showTeacher);
+
+    for (let keys in form.entries()) {
+      console.log(keys[0] + " = " + keys[1]);
+    }
+
     const response = await axios.post("/api/upload", form);
     console.log(response);
   };
@@ -85,8 +95,9 @@ export default function FileUpload({ open, files, courses }) {
               <TableHead>
                 <TableRow>
                   <TableCell>File Name</TableCell>
-                  <TableCell>File Type</TableCell>
+                  <TableCell>Type</TableCell>
                   <TableCell>Course</TableCell>
+                  <TableCell>Campus</TableCell>
                   <TableCell>Semester</TableCell>
                 </TableRow>
               </TableHead>
@@ -109,9 +120,17 @@ export default function FileUpload({ open, files, courses }) {
                         />
                       </TableCell>
                       <TableCell>
+                        <SelectCampus
+                          index={index}
+                          HandleCampusChange={HandleCampusChange}
+                          campuses={campuses}
+                        />
+                      </TableCell>
+                      <TableCell>
                         <SelectSemester
                           index={index}
                           HandleSemesterYearChange={HandleSemesterYearChange}
+                          campuses={campuses}
                         />
                       </TableCell>
                     </TableRow>

@@ -22,7 +22,7 @@ export default function AccountForm({ session }) {
   // const [dob, setDob] = useState(new Date());
   const [degree, setDegree] = useState("");
   const useEffectRef = useRef(false);
-  console.log("Session", session);
+
   useEffect(() => {
     async function inputUser() {
       if (session?.type === "admin") {
@@ -32,7 +32,6 @@ export default function AccountForm({ session }) {
         email: session?.user.email,
         type: "insert",
       });
-      console.log("Insert Response", response);
     }
     if (!useEffectRef.current && !session?.verified) {
       inputUser();
@@ -64,7 +63,7 @@ export default function AccountForm({ session }) {
       degree: session.type === "student" ? degree : null,
       type: "update",
     });
-    console.log("Update Response", response);
+
     router.push("/");
   };
 

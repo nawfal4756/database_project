@@ -3,10 +3,11 @@ import { unstable_getServerSession } from "next-auth";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import FileUpload from "../Components/FileUpload";
+import { getAllCampus } from "../Database/CampusCommands";
 import { getAllCourses } from "../Database/CourseCommands";
 import { authOptions } from "./api/auth/[...nextauth]";
 
-export default function Upload({ courses }) {
+export default function Upload({ courses, campuses }) {
   const { data: session } = useSession({ required: true });
   const [files, setFiles] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
@@ -31,13 +32,19 @@ export default function Upload({ courses }) {
           onChange={HandleFileChange}
         />
       </Button>
-      <FileUpload open={openDialog} files={files} courses={courses} />
+      <FileUpload
+        open={openDialog}
+        files={files}
+        courses={courses}
+        campuses={campuses}
+      />
     </div>
   );
 }
 
 export const getServerSideProps = async (context) => {
   const courses = await getAllCourses();
+  const campuses = await getAllCampus();
   const session = await unstable_getServerSession(
     context.req,
     context.res,
@@ -65,6 +72,7 @@ export const getServerSideProps = async (context) => {
   return {
     props: {
       courses,
+      campuses,
     },
   };
 };

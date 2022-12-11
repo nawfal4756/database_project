@@ -97,6 +97,11 @@ CREATE TABLE campus (
     campus_city_name VARCHAR(50) not null
 );
 
+INSERT INTO campus (campus_name, campus_city_name) VALUES ("Main Campus", "Karachi");
+INSERT INTO campus (campus_name, campus_city_name) VALUES ("City Campus", "Karachi");
+INSERT INTO campus (campus_name, campus_city_name) VALUES ("Main Campus", "Lahore");
+INSERT INTO campus (campus_name, campus_city_name) VALUES ("Main Campus", "Islamabad");
+
 CREATE TABLE admin (
 	admin_email VARCHAR(100) primary key,
     admin_fname VARCHAR(50),
@@ -115,3 +120,26 @@ UPDATE admin SET admin_fname = ?, admin_lname = ?, basicForm = true WHERE admin_
 SELECT * FROM admin WHERE admin_email = ?;
 SELECT * FROM student WHERE student_email = ?;
 SELECT * FROM teacher WHERE teacher_email = ?;
+
+SELECT campus_id, campus_name || ' - ' || campus_city_name as campus_name_joined FROM campus;
+SELECT campus_id, concat_ws(' - ', campus_name, campus_city_name) as campus_name FROM campus;
+
+CREATE TABLE document (
+	course_code VARCHAR(10),
+    document_id int,
+	document_name VARCHAR(200) not null,
+    document_type VARCHAR(20) not null,
+    document_url VARCHAR(500) not null,
+    document_verified boolean default false,
+    document_anonymous boolean,
+    document_student boolean,
+    document_teacher boolean,
+    campus_id int,
+    document_uploader_email VARCHAR(100) not null,
+    document_uploader_type VARCHAR(10) not null,
+    document_date_semester VARCHAR(20) not null,
+    document_date_year int not null,
+    primary key(course_code, document_id),
+    foreign key(course_code) references course(course_code),
+    foreign key(campus_id) references campus(campus_id)
+);
