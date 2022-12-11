@@ -5,7 +5,6 @@ import {
   DialogContent,
   DialogTitle,
   FormControlLabel,
-  Select,
   Switch,
   Table,
   TableBody,
@@ -16,6 +15,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import SelectCampus from "./SelectCampus";
 import SelectCourse from "./SelectCourse";
@@ -24,14 +24,17 @@ import SelectSemester from "./SelectSemester";
 
 export default function FileUpload({ open, files, courses, campuses }) {
   const filesArray = [];
+  const dataArray = [];
   const { data: session } = useSession();
+  const router = useRouter();
   const [anonymous, setAnonymous] = useState(false);
   const [showStudent, setShowStudent] = useState(true);
   const [showTeacher, setShowTeacher] = useState(true);
 
   Object.keys(files).forEach((value, index) => {
-    filesArray.push({
-      file: files[value],
+    filesArray.push(files[value]);
+
+    dataArray.push({
       type: "",
       course: "",
       campus: "",
@@ -53,36 +56,48 @@ export default function FileUpload({ open, files, courses, campuses }) {
   };
 
   const HandleFileTypeChange = (index, value) => {
-    filesArray[index].type = value;
+    dataArray[index].type = value;
+    console.log(dataArray[index]);
   };
 
   const HandleCourseChange = (index, value) => {
-    filesArray[index].course = value;
+    dataArray[index].course = value;
+    console.log(dataArray[index]);
   };
 
   const HandleCampusChange = (index, value) => {
-    filesArray[index].campus = value;
+    dataArray[index].campus = value;
+    console.log(dataArray[index]);
   };
 
   const HandleSemesterYearChange = (index, value) => {
-    filesArray[index].semester = value.semester;
-    filesArray[index].year = value.year;
+    dataArray[index].semester = value.semester;
+    dataArray[index].year = value.year;
+    console.log(dataArray[index]);
   };
 
   const HandleSubmit = async () => {
     const form = new FormData();
-    form.append("files", files);
-    form.append("filesArray", filesArray);
+    Array.from(files).forEach((file) => {
+      form.append(file.name, file);
+    });
+    form.append("dataArray", JSON.stringify(dataArray));
     form.append("anonymous", anonymous);
     form.append("showStudent", showStudent);
     form.append("showTeacher", showTeacher);
 
-    for (let keys in form.entries()) {
-      console.log(keys[0] + " = " + keys[1]);
-    }
+    const config = {
+      onUploadProgress: (event) => {
+        console.log(
+          `Current progress:`,
+          Math.round((event.loaded * 100) / event.total)
+        );
+      },
+    };
 
-    const response = await axios.post("/api/upload", form);
+    const response = await axios.post("/api/upload", form, config);
     console.log(response);
+    router.push("/");
   };
 
   return (
@@ -105,7 +120,7 @@ export default function FileUpload({ open, files, courses, campuses }) {
                 {filesArray.map((item, index) => {
                   return (
                     <TableRow key={index}>
-                      <TableCell>{item.file.name}</TableCell>
+                      <TableCell>{item.name}</TableCell>
                       <TableCell>
                         <SelectFile
                           index={index}

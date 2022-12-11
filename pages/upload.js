@@ -26,6 +26,7 @@ export default function Upload({ courses, campuses }) {
         Upload Files
         <input
           type="file"
+          name="files"
           hidden
           multiple
           accept=".txt, .pdf, .docx"

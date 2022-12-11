@@ -14,9 +14,9 @@ export default function Main({ data }) {
             Recently Uploaded
           </Typography>
         </Grid>
-        {data.map((data) => {
+        {data.map((data, index) => {
           return (
-            <Grid xs={12} md={6} key={data.id}>
+            <Grid xs={12} md={6} key={index}>
               <DocumentCard data={data} />
             </Grid>
           );

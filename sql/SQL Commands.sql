@@ -126,10 +126,9 @@ SELECT campus_id, concat_ws(' - ', campus_name, campus_city_name) as campus_name
 
 CREATE TABLE document (
 	course_code VARCHAR(10),
-    document_id int,
+    document_uploaded_date timestamp default now(),
 	document_name VARCHAR(200) not null,
     document_type VARCHAR(20) not null,
-    document_url VARCHAR(500) not null,
     document_verified boolean default false,
     document_anonymous boolean,
     document_student boolean,
@@ -139,7 +138,11 @@ CREATE TABLE document (
     document_uploader_type VARCHAR(10) not null,
     document_date_semester VARCHAR(20) not null,
     document_date_year int not null,
-    primary key(course_code, document_id),
+    primary key(course_code, document_uploaded_date),
     foreign key(course_code) references course(course_code),
     foreign key(campus_id) references campus(campus_id)
 );
+
+DROP TABLE document;
+
+INSERT INTO document (course_code, document_name, document_type, document_anonymous, document_student, document_teacher, campus_id, document_uploader_email, document_uploader_type, document_date_semester, document_date_year) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
