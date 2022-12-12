@@ -26,8 +26,8 @@ export default async function handler(req, res) {
     res.status(200).json({ documents });
     return;
   } else if (req.method === "POST") {
-    console.log(req.body.code);
-    await updateVerifyStatus(req.body.code);
+    console.log(req.body.id);
+    await updateVerifyStatus(req.body.id);
     res.status(200).json({ message: "Successful" });
     return;
   } else if (req.method === "DELETE") {

@@ -123,12 +123,12 @@ export const getServerSideProps = async (context) => {
           destination: "/signup",
         },
       };
-      // } else if (session.type != "admin") {
-      //   return {
-      //     redirect: {
-      //       destination: "/",
-      //     },
-      //   };
+    } else if (session.type != "admin") {
+      return {
+        redirect: {
+          destination: "/",
+        },
+      };
     }
   }
 

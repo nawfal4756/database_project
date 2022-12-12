@@ -1,9 +1,7 @@
 import { Typography, Unstable_Grid2 as Grid } from "@mui/material";
-import axios from "axios";
 import { unstable_getServerSession } from "next-auth";
 import DocumentCard from "../Components/DocumentCard";
 import { selectDocuments20 } from "../Database/DocumentCommands";
-import { defaults } from "../lib/default";
 import { authOptions } from "./api/auth/[...nextauth]";
 
 export default function Main({ documents }) {
@@ -30,7 +28,6 @@ export default function Main({ documents }) {
 }
 
 export const getServerSideProps = async (context) => {
-  const data = await axios(`${defaults.link}/document`);
   const documents = await selectDocuments20();
   console.log(documents);
   const session = await unstable_getServerSession(

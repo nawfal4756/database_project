@@ -27,7 +27,7 @@ export default function AdminDocumentPage() {
   }, [date]);
 
   const HandleVerify = async (id) => {
-    const response = await axios.post(`/api/admin/document`, id);
+    const response = await axios.post(`/api/admin/document`, { id });
     console.log(response);
     setDate(new Date());
   };
@@ -155,12 +155,12 @@ export const getServerSideProps = async (context) => {
           destination: "/signup",
         },
       };
-      // } else if (session.type != "admin") {
-      //   return {
-      //     redirect: {
-      //       destination: "/",
-      //     },
-      //   };
+    } else if (session.type != "admin") {
+      return {
+        redirect: {
+          destination: "/",
+        },
+      };
     }
   }
 

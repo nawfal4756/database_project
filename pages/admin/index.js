@@ -1,14 +1,24 @@
-import { Button, Typography, Unstable_Grid2 as Grid } from "@mui/material";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  Typography,
+  Unstable_Grid2 as Grid,
+} from "@mui/material";
 import axios from "axios";
 import { unstable_getServerSession } from "next-auth";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { defaults } from "../../lib/default";
 import { authOptions } from "../api/auth/[...nextauth]";
 
 export default function AdminHomePage() {
   const [countAll, setCountAll] = useState(0);
   const [countVerified, setCountVerified] = useState(0);
+  const [openAddAdmin, setOpenAddAdmin] = useState(false);
+  const [email, setEmail] = useState("");
 
   useEffect(() => {
     async function getValues() {
@@ -20,10 +30,49 @@ export default function AdminHomePage() {
     getValues();
   }, []);
 
+  const HandleAddAdmin = async () => {
+    setOpenAddAdmin(false);
+  };
+
   return (
     <div>
       <Grid container spacing={2}>
         <Grid item xs={12} direction="row">
+          {/* <Dialog open={openAddAdmin}>
+            <DialogTitle>Add Admin</DialogTitle>
+            <DialogContent>
+              <TextField
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                label="Email"
+                sx={{ p: 1, m: 1 }}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button
+                onClick={() => {
+                  setOpenAddAdmin(false);
+                }}
+                variant="outlined"
+              >
+                Cancel
+              </Button>
+              <Button onClick={HandleAddAdmin} variant="contained">
+                Add
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Button
+            variant="contained"
+            sx={{ mx: 1 }}
+            onClick={() => {
+              setOpenAddAdmin(true);
+            }}
+          >
+            Add Admin
+          </Button> */}
           <Link href="/admin/document">
             <Button variant="contained" sx={{ mx: 1 }}>
               View All Documents
@@ -70,12 +119,12 @@ export const getServerSideProps = async (context) => {
           destination: "/signup",
         },
       };
-      // } else if (session.type != "admin") {
-      //   return {
-      //     redirect: {
-      //       destination: "/",
-      //     },
-      //   };
+    } else if (session.type != "admin") {
+      return {
+        redirect: {
+          destination: "/",
+        },
+      };
     }
   }
 

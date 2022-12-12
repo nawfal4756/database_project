@@ -31,16 +31,18 @@ export default async function handler(req, res) {
 
     try {
       filesArray.map(async (item, index) => {
+        const name =
+          "documents/" +
+          new Date() +
+          dataArray[index].type +
+          "-" +
+          dataArray[index].course +
+          "-" +
+          item.originalFilename;
         s3client.putObject(
           {
             Bucket: process.env.DO_SPACES_BUCKET,
-            Key:
-              "documents/" +
-              dataArray[index].type +
-              "-" +
-              dataArray[index].course +
-              "-" +
-              item.originalFilename,
+            Key: name,
             Body: createReadStream(item.filepath),
           },
           async () => {}
@@ -48,12 +50,7 @@ export default async function handler(req, res) {
 
         await insertDocument(
           dataArray[index].course,
-          "documents/" +
-            dataArray[index].type +
-            "-" +
-            dataArray[index].course +
-            "-" +
-            item.originalFilename,
+          name,
           dataArray[index].type,
           anonymous,
           showStudent,
